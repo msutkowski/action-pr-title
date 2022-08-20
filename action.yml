@@ -1,11 +1,25 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Pull Request title conventions'
+description: 'Github action to enforce Pull Request title conventions with regex'
+author: 'Matt Sutkowski'
 inputs:
-  milliseconds: # change this
+  regex:
+    description: 'Regex to validate the pull request title'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    default: '.+'
+  max_length:
+    description: 'Max length of title. -1 to ignore the rule'
+    required: false
+    default: '-1'
+  hint:
+    description: 'A friendly hint about the possible title format(s)'
+    required: true
+    default: >
+      Use a format like: "fix: [ABC-123] some description" or "chore: fix github actions"'
+  github_token:
+    description: >
+      Personal access token (PAT) used to interact with the API.
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'node16'
   main: 'dist/index.js'
