@@ -1,10 +1,11 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import type { Context } from '@actions/github/lib/context';
-import type { WebhookPayload } from '@actions/github/lib/interfaces';
 
 function hasPullRequestPayload(context: Context): context is Context & {
-  payload: { pull_request: NonNullable<WebhookPayload['pull_request']> };
+  payload: {
+    pull_request: NonNullable<Context['payload']['pull_request']>;
+  };
 } {
   return 'pull_request' in context.payload;
 }
@@ -12,7 +13,6 @@ function hasPullRequestPayload(context: Context): context is Context & {
 async function run(): Promise<void> {
   try {
     const authToken = core.getInput('github_token', { required: true });
-    const hint = core.getInput('hint');
     const eventName = github.context.eventName;
     core.info(`Event name: ${eventName}`);
 
@@ -39,13 +39,15 @@ async function run(): Promise<void> {
     core.info(`Current Pull Request title: "${title}"`);
 
     const regex = RegExp(core.getInput('regex'));
+    const hint = core.getInput('hint');
+
     if (!regex.test(title)) {
       core.setFailed(
         `
 Pull Request title "${title}" failed to match rule: ${regex}
 
-Hint: ${hint}
-`,
+ ${hint ?? ''}
+      `,
       );
       return;
     }

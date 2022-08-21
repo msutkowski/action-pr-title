@@ -1,12 +1,10 @@
 ## Usage
 
-See [action.yml](./action.yml)
-
 ```yaml
 steps:
   - uses: msutkowski/action-pr-title@v1
     with:
-      regex: '([a-z])+\/([a-z])+' # Regex the title should match.
+      regex: '([a-z])+\/([a-z])+' # Regex to test the PR title against
       max_length: 20 # Max length of the title
       hint: 'PR titles should match a format like: fix: [ABC-1234] some description' # A hint for the desired format
       github_token: ${{ github.token }} # Default: ${{ github.token }}
@@ -33,7 +31,9 @@ jobs:
         uses: msutkowski/action-pr-title@v1
         with:
           regex: '^(fix|feat|chore|(fix|feat|chore)\(\w.*\)):\s(\[\w{1,8}-\d{1,8}\]|.*).*'
-          hint: >
+          hint: |
+            You can pass the following formats:
+
             fix: [OR-123] some title of the PR
             fix(scope): [OR-123] some title of the PR
             feat: [OR-1234] some title of the PR
@@ -80,18 +80,6 @@ Note: We recommend using the `--license` option for ncc, which will create a lic
 Your action is now published! :rocket:
 
 See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
 
 ## Usage:
 
